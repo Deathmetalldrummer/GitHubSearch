@@ -1,0 +1,6 @@
+<form class="search" (submit)="searching()">
+  <button type="submit" class="search__icon">
+    <mat-icon>search</mat-icon>
+  </button>
+  <input [(ngModel)]="search" (ngModelChange)="searching()" name="search" type="search" class="search__field" placeholder="Search" />
+</form>
