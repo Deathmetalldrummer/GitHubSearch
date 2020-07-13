@@ -1,0 +1,6 @@
+<mat-selection-list [multiple]="false" class="filterList" [(ngModel)]="model" (ngModelChange)="onNgModelChange($event)">
+  <mat-list-option *ngFor="let item of list, let i = index" [selected]="i === 0" [value]="item">
+    {{item}}
+    <mat-divider *ngIf="i < (list.length - 1)"></mat-divider>
+  </mat-list-option>
+</mat-selection-list>

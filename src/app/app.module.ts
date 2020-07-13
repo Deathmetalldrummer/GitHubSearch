@@ -19,11 +19,15 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { TableComponent } from './table/table.component';
+import { TypeListComponent } from './type-list/type-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchComponent
+    SearchComponent,
+    TableComponent,
+    TypeListComponent
   ],
   imports: [
     BrowserModule,

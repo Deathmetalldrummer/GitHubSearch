@@ -1,14 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSelectionListChange} from '@angular/material/list';
-
-interface Repo {
-  full_name: string;
-  description: string;
-}
+import {Component, OnInit} from '@angular/core';
+import {AppService} from './app.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,28 +9,53 @@ interface Repo {
 
 export class AppComponent implements OnInit {
   title = 'GitHubFilter';
-  value;
-  searchResult: Array<Repo>;
-  searchType: string[] = ['Repositories', 'Code', 'Commits', 'Packages', 'Users'];
-  api = 'https://api.github.com/search/';
-  displayedColumns: string[] = ['full_name', 'description'];
-  dataSource = new MatTableDataSource(this.searchResult);
-  @ViewChild(MatPaginator) set matPaginator( paginator: MatPaginator) {
-    this.dataSource.paginator = paginator;
-  }
-  @ViewChild(MatSort) set matSort( sort: MatSort) {
-    this.dataSource.sort = sort;
-  }
 
-  constructor(private http: HttpClient) {}
+  searchType: string[] = ['Repositories', 'Users'];
+  searchTypeValue: string = this.searchType[0].toLowerCase();
+
+  headers;
+  headersKeys;
+  body;
+  headersParams = {
+    repositories: {
+      cols: [['full_name', 'Name'], ['description', 'Description'], ['stargazers_count', 'Stars'],
+            ['language', 'Language'], ['updated_at', 'Last Update']],
+      keys: ['full_name', 'description', 'stargazers_count', 'language', 'updated_at']
+    },
+    users: {
+      cols: [['login', 'Login']],
+      keys: ['login']
+    }
+  };
+  private queryParams: any;
+
+  constructor(private appService: AppService) {}
   ngOnInit() {
   }
-  search(value) {
-    console.log(value);
-    this.http.get(this.api + 'repositories', {params: {q: value, p: '3'}}).subscribe((data: any) => {
-      console.log(data);
-      this.searchResult = data.items;
-      this.dataSource.data = data.items;
-    });
+  search(value?) {
+    this.queryParams = {q: value};
+    this.getBody();
+  }
+
+  typeListChanged(value: Array<string>) {
+    this.searchTypeValue = value[0].toLowerCase();
+    this.getBody();
+  }
+
+  getBody() {
+    if (this.queryParams && this.queryParams.q) {
+      this.appService.search(this.queryParams, this.searchTypeValue).subscribe((data: any) => {
+        console.log(data);
+        this.body = data.items;
+        if (this.searchTypeValue === 'repositories') {
+          this.body = this.body.map(item => {
+            item.updated_at = moment(item.updated_at).format('DD MMM YYYY');
+            return item;
+          });
+        }
+        this.headers = this.headersParams[this.searchTypeValue].cols;
+        this.headersKeys = this.headersParams[this.searchTypeValue].keys;
+      });
+    }
   }
 }
