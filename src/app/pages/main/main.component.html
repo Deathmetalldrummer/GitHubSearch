@@ -1,0 +1,8 @@
+<main class="wrapper">
+  <aside class="sidebar">
+    <app-type-list [list]="searchType" (changed)="typeListChanged($event)" class="mat-elevation-z8"></app-type-list>
+  </aside>
+  <section class="content">
+    <app-table [headers]="headers" [body]="body|async" [headersKeys]="headersKeys" (row)="onRow($event)" [class.mat-elevation-z8]="body|async"></app-table>
+  </section>
+</main>

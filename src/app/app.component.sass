@@ -2,24 +2,16 @@
   flex: 1 1 auto
 .search
   width: 50%
-.wrapper
-  display: flex
-  width: 80%
-  padding: 2em 0
-  margin: auto
-.sidebar
-  width: 20%
-  flex-shrink: 0
-.content
-  margin-left: 2em
-  flex-grow: 1
 
 .toolbarBox
-  @extend .wrapper
+  display: flex
+  margin: auto
   padding: 0
   width: 82%
   align-items: center
 .toolbarBox__left
-  @extend .sidebar
+  width: 20%
+  flex-shrink: 0
 .toolbarBox__right
-  @extend .content
+  margin-left: 2em
+  flex-grow: 1

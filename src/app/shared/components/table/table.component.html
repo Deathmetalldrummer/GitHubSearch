@@ -5,7 +5,7 @@
 
     <ng-container *ngFor="let item of headers" [matColumnDef]="item[0]">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{item[1]}}</th>
-      <td mat-cell *matCellDef="let element">{{element[item[0]]}}</td>
+      <td mat-cell *matCellDef="let element" (click)="row.emit(element)">{{element[item[0]]}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="headersKeys"></tr>

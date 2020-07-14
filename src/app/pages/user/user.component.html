@@ -1,0 +1,23 @@
+<main class="wrapper" *ngIf="user">
+  <div class="wrapper__back">
+    <h1 [routerLink]="''" class="back">< Home</h1>
+    <hr>
+  </div>
+  <aside class="sidebar">
+    <img [src]="user.avatar_url" alt="@" class="user__avatar" />
+  </aside>
+  <section class="content">
+    <h1>
+      <a [href]='user.html_url' target="_blank">{{user.name}}</a>
+    </h1>
+    <p>{{user.bio}}</p>
+    <ng-container *ngIf="(repos|async)">
+      <h4>Repositories</h4>
+      <ul>
+        <li *ngFor="let item of (repos|async)">
+          <a [routerLink]="['/repository', item.owner.login, item.name]">{{item.name}}</a>
+        </li>
+      </ul>
+    </ng-container>
+  </section>
+</main>

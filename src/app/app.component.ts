@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {AppService} from './app.service';
 import * as moment from 'moment';
+import {BodyChange, SearchChange} from './store/action';
+import {select, Store} from '@ngrx/store';
+import {AppState} from './store/store';
+import {selectSearch, selectSearchType} from './store/selectors';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,52 +13,38 @@ import * as moment from 'moment';
 
 export class AppComponent implements OnInit {
   title = 'GitHubFilter';
-
-  searchType: string[] = ['Repositories', 'Users'];
-  searchTypeValue: string = this.searchType[0].toLowerCase();
-
-  headers;
-  headersKeys;
+  searchValue;
+  searchTypeValue;
   body;
-  headersParams = {
-    repositories: {
-      cols: [['full_name', 'Name'], ['description', 'Description'], ['stargazers_count', 'Stars'],
-            ['language', 'Language'], ['updated_at', 'Last Update']],
-      keys: ['full_name', 'description', 'stargazers_count', 'language', 'updated_at']
-    },
-    users: {
-      cols: [['login', 'Login']],
-      keys: ['login']
-    }
-  };
-  private queryParams: any;
 
-  constructor(private appService: AppService) {}
+  constructor(private appService: AppService, private store: Store<AppState>) {}
   ngOnInit() {
+    this.store.pipe(select(selectSearch)).subscribe(data => {
+      this.searchValue = data;
+      this.getBody();
+    });
+    this.store.pipe(select(selectSearchType)).subscribe(data => {
+      this.searchTypeValue = data;
+      this.getBody();
+    });
   }
   search(value?) {
-    this.queryParams = {q: value};
-    this.getBody();
-  }
-
-  typeListChanged(value: Array<string>) {
-    this.searchTypeValue = value[0].toLowerCase();
-    this.getBody();
+    if (value) {
+      this.store.dispatch(new SearchChange({q: value}));
+    }
   }
 
   getBody() {
-    if (this.queryParams && this.queryParams.q) {
-      this.appService.search(this.queryParams, this.searchTypeValue).subscribe((data: any) => {
-        console.log(data);
-        this.body = data.items;
+    if (this.searchValue && this.searchValue.q) {
+      this.appService.search(this.searchValue, this.searchTypeValue).subscribe((data: any) => {
+        let body = data.items;
         if (this.searchTypeValue === 'repositories') {
-          this.body = this.body.map(item => {
+          body = data.items.map(item => {
             item.updated_at = moment(item.updated_at).format('DD MMM YYYY');
             return item;
           });
         }
-        this.headers = this.headersParams[this.searchTypeValue].cols;
-        this.headersKeys = this.headersParams[this.searchTypeValue].keys;
+        this.store.dispatch(new BodyChange(body));
       });
     }
   }

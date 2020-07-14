@@ -12,22 +12,29 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { SearchComponent } from './search/search.component';
+import { SearchComponent } from './shared/components/search/search.component';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import { TableComponent } from './table/table.component';
-import { TypeListComponent } from './type-list/type-list.component';
+import { TableComponent } from './shared/components/table/table.component';
+import { TypeListComponent } from './shared/components/type-list/type-list.component';
+import { UserComponent } from './pages/user/user.component';
+import { RepoComponent } from './pages/repo/repo.component';
+import { MainComponent } from './pages/main/main.component';
+import {reducers} from './store/reducer';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
     TableComponent,
-    TypeListComponent
+    TypeListComponent,
+    UserComponent,
+    RepoComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +52,7 @@ import { TypeListComponent } from './type-list/type-list.component';
     MatPaginatorModule,
     FormsModule,
     MatSortModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot(reducers),
   ],
   providers: [],
   bootstrap: [AppComponent]

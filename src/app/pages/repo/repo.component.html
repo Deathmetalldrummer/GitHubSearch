@@ -1,0 +1,17 @@
+<main class="wrapper">
+  <section class="content" *ngIf="repo">
+    <h1 [routerLink]="'/'" class="back">< Home</h1>
+    <hr>
+    <h1>
+      <a [routerLink]="['/user', repo.owner.login]">{{repo.owner.login}}</a> /
+      <a [href]='repo.html_url' target="_blank">{{repo.name}}</a>
+    </h1>
+    <p>{{repo.description}}</p>
+    <ng-container *ngIf="isEmptyObject(lang|async)">
+      <h4>Languages</h4>
+      <ul>
+        <li *ngFor="let item of (lang|async) | keyvalue">{{item.key}} - {{item.value}}bite</li>
+      </ul>
+    </ng-container>
+  </section>
+</main>

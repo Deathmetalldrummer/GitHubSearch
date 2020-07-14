@@ -8,11 +8,4 @@
     </div>
   </div>
 </mat-toolbar>
-<main class="wrapper">
-  <aside class="sidebar">
-    <app-type-list [list]="searchType" (changed)="typeListChanged($event)" class="mat-elevation-z8"></app-type-list>
-  </aside>
-  <section class="content">
-    <app-table [headers]="headers" [body]="body" [headersKeys]="headersKeys" [class.mat-elevation-z8]="body"></app-table>
-  </section>
-</main>
+<router-outlet></router-outlet>
