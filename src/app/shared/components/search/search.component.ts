@@ -18,7 +18,7 @@ export class SearchComponent implements OnInit {
   searching() {
     clearTimeout(this.throttling);
     this.throttling = setTimeout(() => {
-      console.log('throttling', true);
+      // console.log('throttling', true);
       this.searchChanged.emit(this.search);
     }, 500);
   }

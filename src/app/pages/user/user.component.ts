@@ -15,7 +15,6 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
     this.activateRoute.params.subscribe(data => {
       this.appService.getUser(data.id).subscribe((user: any) => {
-        console.log(user);
         this.user = user;
         this.repos = this.appService.getFromUrl(user.repos_url);
       });
